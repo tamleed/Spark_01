@@ -1,0 +1,30 @@
+default_model: gpt-oss-120b
+
+models:
+  gpt-oss-120b:
+    base_url: "http://127.0.0.1:8001"
+    start_cmd: >-
+      CUDA_VISIBLE_DEVICES=0,1 vllm serve openai/gpt-oss-120b
+      --host 127.0.0.1 --port 8001 --gpu-memory-utilization 0.92
+      --max-model-len 8192
+    startup_timeout_sec: 480
+    health_path: "/health"
+
+  qwen3-30b:
+    base_url: "http://127.0.0.1:8002"
+    start_cmd: >-
+      CUDA_VISIBLE_DEVICES=0 vllm serve Qwen/Qwen3-30B-A3B-Instruct-2507
+      --host 127.0.0.1 --port 8002 --gpu-memory-utilization 0.92
+      --max-model-len 8192
+    startup_timeout_sec: 360
+    health_path: "/health"
+
+  qwen3-235b-4bit:
+    base_url: "http://127.0.0.1:8003"
+    start_cmd: >-
+      CUDA_VISIBLE_DEVICES=0,1,2,3 vllm serve Qwen/Qwen3-235B-A22B-Instruct-2507-AWQ
+      --host 127.0.0.1 --port 8003 --quantization awq
+      --tensor-parallel-size 4 --gpu-memory-utilization 0.95
+      --max-model-len 4096
+    startup_timeout_sec: 900
+    health_path: "/health"
